@@ -1,0 +1,78 @@
+grumphp:
+  process_timeout: 900
+  environment:
+    variables:
+      GRUMPHP_FPROJECT_DIR: "."
+      GRUMPHP_GIT_WORKING_DIR: "."
+      GRUMPHP_GIT_REPOSITORY_DIR: ".git"
+      GRUMPHP_COMPOSER_DIR: "."
+      GRUMPHP_BIN_DIR: "vendor/bin"
+  tasks:
+    phpcs:
+      standard: "ruleset.xml"
+      warning_severity: 0
+      triggered_by: [php]
+      ignore_patterns:
+        - ".phpro/cfg/"
+        - "Test/"
+        - "app/code/Baldwin"
+        - "app/code/DPDBenelux"
+        - "app/code/MageArray"
+        - "app/code/Magento"
+        - "app/code/PcPostcode"
+        - "app/code/Plumrocket"
+        - "app/code/ThLassche"
+        - "app/etc"
+        - "magento-vars.php"
+        - "phpunit.bootstrap.php"
+        - "tools/"
+        - "bridge2cart"
+        - "n98-magerun2.phar"
+        - "large.jpg"
+        - "benchmark.jmx"
+      exclude:
+        - Magento2.Functions.StaticFunction
+        - Magento2.Exceptions.DirectThrow
+        - Magento2.Exceptions.ThrowCatch
+        - Magento2.Translation.ConstantUsage
+        - Magento2.Classes.DiscouragedDependencies
+        - Magento2.Legacy.InstallUpgrade
+        - Magento2.Legacy.RestrictedCode
+        - Magento2.Security.InsecureFunction
+
+    phpcsfixer2:
+      allow_risky: true
+      config: '.php-cs-fixer.php'
+      triggered_by: [ 'php' ]
+
+    phpunit:
+      always_execute: true
+
+    git_commit_message:
+      matchers:
+        - /(E5M2|E5SD)-([0-9]*)/
+      case_insensitive: true
+      multiline: true
+    git_blacklist:
+      keywords:
+        - "_GET\\["
+        - "_POST\\["
+        - "_REQUEST\\["
+        - "console.log("
+        - "die("
+        - "die;"
+        - "exit("
+        - "exit;"
+        - "phpinfo"
+        - "phpinfo("
+        - "var_dump("
+      triggered_by: [php,js]
+
+    file_size:
+      max_size: 5M
+
+    clover_coverage:
+      clover_file: clover.xml
+      level: 16
+
+
